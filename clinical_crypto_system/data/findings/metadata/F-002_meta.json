@@ -1,0 +1,10 @@
+{
+  "finding_code": "F-002",
+  "created_by": "researcher3",
+  "created_at": "2026-04-25T21:34:43",
+  "signed": true,
+  "signed_by": "researcher3",
+  "signed_at": "2026-04-25T21:34:43",
+  "signature_algorithm": "RSA-PSS",
+  "signature": "H5NVW3R5op6VHOviizuLBo0MLLCErYVo4LRrw7GCKGJmrU2JFd45Y3smAqgYdmE+wKtqTbNsyFoY7hRbpZoNzzxsZsR+icEuKiuGw+8WxcCdpcOZDHCKUvpv/7/lQjjzcjStxsWEm0QTBd3wcD/qTVBn8/1EoXhDD4oPS5fxJolVO29MgghGwHWKsZoIwM44jpSMfmA879lLX09I8Ywr41HjToyvm28+bL3j3RMbVhkAbgHF7Yin2OomIb4va3onxKN/30Q7Hw3r/1sSFNXR3BuAwTmwAajZvQrpiGuPsLW00WD9qeSlOJuFnPIWzRYoQFGaklSW38KNaufwi0Q4zg=="
+}
