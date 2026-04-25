@@ -8,6 +8,7 @@
 4. Open the terminal and run:
 
 cd clinical_crypto_system
+
 python main.py
 
 ## Dependences
