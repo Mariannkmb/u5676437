@@ -7,7 +7,9 @@
 3. Open the terminal and run:
 
 cd clinical_crypto_system
+
 pip install -r requirements.txt
+
 python main.py
 
 ## Dependences
