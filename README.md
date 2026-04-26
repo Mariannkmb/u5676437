@@ -19,17 +19,17 @@ pip install -r requirements.txt
 
 ## Test Accounts
 
-| Username     | Role        | Password     | Digital Firm |
+| Username     | Role        | Password     | Digital Sign |
 |--------------|-------------|--------------|--------------|
-| clinician1   | clinical    | clin123      |			         |
-| clinician2   | clinical    | clin123      |			         |
-| clinician3   | clinical    | clin123      |			         |
+| clinician1   | clinical    | clin123      |			   |
+| clinician2   | clinical    | clin123      |		       |
+| clinician3   | clinical    | clin123      |			   |
 | researcher1  | researcher  | research123  | secret       |
 | researcher2  | researcher  | research123  | secret       |
 | researcher3  | researcher  | research123  | secret       |
-| auditor1     | auditor     | audit123     |		      	   |
-| auditor2     | auditor     | audit123     |	      		   |
-| auditor3     | auditor     | audit123     |		      	   |
+| auditor1     | auditor     | audit123     |		       |
+| auditor2     | auditor     | audit123     |	      	   |
+| auditor3     | auditor     | audit123     |		       |
 
 
 ## Notes for Testing
@@ -42,6 +42,7 @@ pip install -r requirements.txt
 -   Signed findings cannot be modified.
 -   Auditors can verify encryption integrity, signatures, and audit
     logs.
+-   Adversarial use cases are already implemented and can be tested directly through the demo.
 
 ## Reset the System including demo values
 Use this command to restore the system to its initial demo state. This is useful after testing operations, modifying data, or when you need to start from a clean and consistent environment.
