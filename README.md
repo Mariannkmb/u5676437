@@ -4,11 +4,10 @@
 
 1. Open this repository in GitHub https://github.com/Mariannkmb/u5676437
 2. Click Code → Codespaces → Create codespace
-3. Wait a few seconds while dependencies install automatically
-4. Open the terminal and run:
+3. Open the terminal and run:
 
 cd clinical_crypto_system
-
+pip install -r requirements.txt
 python main.py
 
 ## Dependences
