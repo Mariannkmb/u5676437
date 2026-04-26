@@ -2,6 +2,7 @@ from datetime import datetime
 from pathlib import Path
 import json
 import base64
+import hashlib
 
 from crypto_utils import (
     generate_aes_key,
@@ -18,6 +19,13 @@ LOG_KEY_FILE = BASE_DIR / "data" / "logs" / "log_key.json"
 ADMIN_PUBLIC_KEY = str(BASE_DIR / "keys" / "admin1_public.pem")
 ADMIN_PRIVATE_KEY = str(BASE_DIR / "keys" / "admin1_private.pem")
 
+# Encrypt data using AES-GCM.
+def compute_log_file_hash() -> str:
+    if not LOG_FILE.exists():
+        return ""
+
+    data = LOG_FILE.read_bytes()
+    return hashlib.sha256(data).hexdigest()
 
 # Load decrypted logs from encrypted storage
 def load_logs() -> list[dict]:
@@ -84,10 +92,13 @@ def save_logs(logs: list[dict]) -> None:
 
         with open(LOG_FILE, "wb") as file:
             file.write(nonce + ciphertext)
+        
 
     except Exception as error:
         print(f"An error occurred while saving logs: {error}")
 
+log_hash = compute_log_file_hash()
+print(f"[LOG INTEGRITY] SHA-256: {log_hash}")
 
 # Add a new log entry
 def log_action(username: str, role: str, action: str, status: str, details: str = "") -> None:

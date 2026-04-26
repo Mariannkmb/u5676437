@@ -162,7 +162,10 @@ def save_single_finding(finding: dict) -> None:
         with open(finding_file, "wb") as file:
             file.write(nonce + ciphertext)
 
-        # Store signature information separately so auditors can inspect verification status without exposing the encrypted finding content.
+        # SECURITY NOTE:
+        # Finding metadata is stored separately from encrypted content so auditors can
+        # inspect signature status without accessing the full finding body.
+        # Sensitive clinical content remains encrypted in the finding file.
         metadata = {
             "finding_code": finding_code,
             "created_by": finding.get("created_by"),
@@ -267,16 +270,12 @@ def show_finding_details(finding: dict, viewer_role: str) -> None:
     if signed:
         print(f"{'Signed by:':25}{finding.get('signed_by')}")
         print(f"{'Signed at:':25}{finding.get('signed_at')}")
-    else:
-        print(f"{'Signature status:':25}No signature stored")
 
-    print("=" * WIDTH)
-    print(f"{'Security:':25}Encrypted with AES-256-GCM.")
-    print(f"{'':25}Key protected with RSA-OAEP.")
-    if signed:
-        print(f"{'':25}Digitally signed with RSA-PSS.")
-    else:
-        print(f"{'':25}No digital signature present.")
+    print("-" * WIDTH)
+    print(f"{'Security:':25}Encrypted with AES-256-GCM")
+    print(f"{'':25}Key protected with RSA-OAEP")
+    print(f"{'':25}Digital signature: {'RSA-PSS' if signed else 'Not applied'}")
+
     print("=" * WIDTH)
 
 

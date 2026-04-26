@@ -35,6 +35,10 @@ def load_public_key_from_file(public_key_path: str):
 
 # Load an RSA private key from a PEM file.
 # Private keys are used only when recovering protected AES keys.
+# DEMO NOTE:
+# In this academic/demo version, the admin private key is loaded without a passphrase
+# to keep the command-line workflow simple.
+# In production, this key should be protected using a passphrase, KMS, Vault, or HSM.
 def load_private_key_from_file(private_key_path: str):
     with open(private_key_path, "rb") as key_file:
         return serialization.load_pem_private_key(

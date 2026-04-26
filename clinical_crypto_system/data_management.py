@@ -46,8 +46,10 @@ def load_dataset_metadata() -> list[dict]:
             continue
     return metadata
 
-# Saves metadata for a single dataset
-# Metadata is stored separately from encrypted content for security and to allow listing datasets without decryption
+# SECURITY NOTE:
+# Dataset metadata is intentionally stored in plaintext because auditors must
+# inspect technical metadata without accessing sensitive clinical content.
+# This metadata must not include patient identifiers, diagnosis, procedure, or any other sensitive clinical information.
 def save_single_dataset_metadata(dataset: dict) -> None:
     DATASETS_METADATA_DIR.mkdir(parents=True, exist_ok=True)
     meta_file = get_dataset_meta_file_path(dataset["dataset_code"])
@@ -318,6 +320,7 @@ def view_datasets() -> bool:
     print("-" * WIDTH)
 
     print(f"{'Created at:':20}{selected_dataset.get('created_at')}")
+    print(f"{'Created by:':20}{selected_dataset.get('created_by')}")
     print(f"{'Encryption:':20}{selected_dataset.get('encryption', 'Unknown')}")
     print(f"{'Key protection:':20}{selected_dataset.get('key_protection', 'Unknown')}")
 

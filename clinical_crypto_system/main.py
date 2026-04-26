@@ -4,7 +4,22 @@ from audit_logging import log_action, get_logs, print_logs
 from data_management import upload_dataset, view_datasets, view_dataset_metadata, delete_dataset
 from findings_management import create_finding, sign_finding, verify_finding, list_findings, edit_finding, delete_finding
 from integrity_check import verify_user_registry_integrity
+from access_control import has_permission
 import pwinput
+
+def require_permission(user: dict, action: str) -> bool:
+    if has_permission(user["role"], action):
+        return True
+
+    print("Access denied. You do not have permission to perform this action.")
+    log_action(
+        user["username"],
+        user["role"],
+        action,
+        "blocked",
+        "Permission denied by RBAC"
+    )
+    return False
 
 
 def show_welcome_screen() -> None:
@@ -49,6 +64,8 @@ def clinical_session(user: dict) -> None:
         choice = input("Choose an option: ").strip()
 
         if choice == "1":
+            if not require_permission(user, "upload_dataset"):
+                continue
             uploaded_dataset_code = upload_dataset(user)
 
             if uploaded_dataset_code:
@@ -69,6 +86,8 @@ def clinical_session(user: dict) -> None:
                 )
 
         elif choice == "2":
+            if not require_permission(user, "view_datasets"):
+                continue
             success = view_datasets()
             if success:
                 log_action(
@@ -88,6 +107,8 @@ def clinical_session(user: dict) -> None:
                 )
 
         elif choice == "3":
+            if not require_permission(user, "delete_dataset"):
+                continue
             deleted_dataset_code = delete_dataset(user)
             if deleted_dataset_code:
                 log_action(
@@ -134,6 +155,8 @@ def researcher_session(user: dict) -> None:
         choice = input("Choose an option: ").strip()
 
         if choice == "1":
+            if not require_permission(user, "view_datasets"):
+                continue    
             success = view_datasets()
             if success:
                 log_action(
@@ -153,6 +176,8 @@ def researcher_session(user: dict) -> None:
                 )
 
         elif choice == "2":
+            if not require_permission(user, "create_finding"):
+                continue
             created_finding_code = create_finding(user)
             if created_finding_code:
                 log_action(
@@ -172,6 +197,8 @@ def researcher_session(user: dict) -> None:
                 )
 
         elif choice == "3":
+            if not require_permission(user, "view_findings"):
+                continue
             findings = list_findings(user["role"])
             if findings:
                 log_action(
@@ -191,6 +218,8 @@ def researcher_session(user: dict) -> None:
                 )
 
         elif choice == "4":
+            if not require_permission(user, "edit_finding"):
+                continue
             edited_finding_code = edit_finding(user)
             if edited_finding_code:
                 log_action(
@@ -210,6 +239,8 @@ def researcher_session(user: dict) -> None:
                 )
 
         elif choice == "5":
+            if not require_permission(user, "delete_finding"):
+                continue
             deleted_finding_code = delete_finding(user)
             if deleted_finding_code:
                 log_action(
@@ -229,6 +260,8 @@ def researcher_session(user: dict) -> None:
                 )
 
         elif choice == "6":
+            if not require_permission(user, "sign_finding"):
+                continue
             signed_finding_code = sign_finding(user)
             if signed_finding_code:
                 log_action(
@@ -275,6 +308,8 @@ def auditor_session(user: dict) -> None:
         choice = input("Choose an option: ").strip()
 
         if choice == "1":
+            if not require_permission(user, "view_dataset_metadata"):
+                continue
             success = view_dataset_metadata()
 
             if success:
@@ -295,6 +330,8 @@ def auditor_session(user: dict) -> None:
                 )
 
         elif choice == "2":
+            if not require_permission(user, "view_findings"):
+                continue
             findings = list_findings(user["role"])
             if findings:
                 log_action(
@@ -314,6 +351,8 @@ def auditor_session(user: dict) -> None:
                 )
 
         elif choice == "3":
+            if not require_permission(user, "verify_signature"):
+                continue
             check_result = verify_finding()
 
             if check_result:
@@ -321,7 +360,7 @@ def auditor_session(user: dict) -> None:
                     log_action(
                         user["username"],
                         user["role"],
-                        "finding_security_check",
+                        "verify_signature",
                         "failed",
                         f"Finding {check_result['code']} cannot be read safely"
                     )
@@ -329,7 +368,7 @@ def auditor_session(user: dict) -> None:
                     log_action(
                         user["username"],
                         user["role"],
-                        "finding_security_check",
+                        "verify_signature",
                         "success",
                         f"Finding {check_result['code']} passed security check"
                     )
@@ -337,7 +376,7 @@ def auditor_session(user: dict) -> None:
                     log_action(
                         user["username"],
                         user["role"],
-                        "finding_security_check",
+                        "verify_signature",
                         "failed",
                         f"Finding {check_result['code']} signature status: {check_result['signature_check']}"
                     )
@@ -345,12 +384,14 @@ def auditor_session(user: dict) -> None:
                 log_action(
                     user["username"],
                     user["role"],
-                    "finding_security_check",
+                    "verify_signature",
                     "failed",
                     "Finding security check cancelled or no findings available"
                 )
 
         elif choice == "4":
+            if not require_permission(user, "view_logs"):
+                continue
             log_action(
                 user["username"],
                 user["role"],
